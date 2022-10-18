@@ -10,6 +10,7 @@ import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -85,6 +86,7 @@ const ContainedButton = styled((props) => <Button {...props} />)(
 
 const SignupForm = (props) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [values, setValues] = React.useState({
     password: "",
@@ -208,13 +210,13 @@ const SignupForm = (props) => {
               special offers and promotions. You can opt out at any time by
               clicking on the unsubscribe link in our emails.
             </span>
-            <Button
+            <ContainedButton
               variant="contained"
-              style={{ backgroundColor: "#152a30", marginTop: 16 }}
-              onClick={props.handleNext}
+              style={{ marginTop: 16 }}
+              onClick={() => navigate("/plan")}
             >
               Create Account
-            </Button>
+            </ContainedButton>
           </>
         ) : (
           <>

@@ -1,15 +1,20 @@
 import React from "react";
-import { Link, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import {
+  Link,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+  StepConnector
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
-import StepConnector, {
-  stepConnectorClasses
-} from "@mui/material/StepConnector";
+import { stepConnectorClasses } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 import PersonIcon from "@mui/icons-material/Person";
 import CheckIcon from "@mui/icons-material/Check";
 import PaymentIcon from "@mui/icons-material/Payment";
-import SignupForm from "./SignupForm";
+import { Outlet, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -38,7 +43,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     padding: "22px 8px",
     color: "white",
-    position: "absolute",
+    position: "fixed",
     bottom: 0,
     width: "100%"
   },
@@ -129,21 +134,10 @@ ColorlibStepIcon.propTypes = {
 
 const steps = ["Account", "Plan", "Payment"];
 
-const Signup = () => {
+const Main = () => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const { pathname } = useLocation();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
   return (
     <div className={classes.root}>
       <div className={classes.header}>
@@ -156,7 +150,15 @@ const Signup = () => {
       <div style={{ width: "100%" }} className={classes.container}>
         <Stepper
           alternativeLabel
-          activeStep={activeStep}
+          activeStep={
+            pathname === "/account"
+              ? 0
+              : pathname === "/plan"
+              ? 1
+              : pathname === "/payment"
+              ? 2
+              : null
+          }
           connector={<ColorlibConnector />}
           style={{ width: "100%", backgroundColor: "#fff" }}
         >
@@ -168,15 +170,7 @@ const Signup = () => {
             </Step>
           ))}
         </Stepper>
-        {activeStep === 0 ? (
-          <>
-            <SignupForm handleNext={handleNext} />
-          </>
-        ) : activeStep === 1 ? (
-          <>plan</>
-        ) : (
-          <></>
-        )}
+        <Outlet />
       </div>
       <div className={classes.footer}>
         <Typography style={{ fontWeight: 600 }}>Customer support</Typography>
@@ -192,4 +186,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Main;
